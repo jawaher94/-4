@@ -1,0 +1,46 @@
+// מטלה 4 — מיון טופולוגי ותכנון דינמי
+// שאלה 1: מספר המסלולים ב-DAG
+
+‏import java.util.*;
+
+‏public class CountPathsDAG {
+‏    static int[] countPaths(List<Integer>[] graph) {
+‏        int n = graph.length;
+‏        int[] inDeg = new int[n];
+‏        for (int u = 0; u < n; u++)
+‏            for (int v : graph[u]) inDeg[v]++;
+
+‏        Queue<Integer> q = new LinkedList<>();
+‏        for (int i = 0; i < n; i++) if (inDeg[i] == 0) q.add(i);
+
+‏        int[] paths = new int[n];
+‏        while (!q.isEmpty()) {
+‏            int u = q.poll();
+‏            if (paths[u] == 0) paths[u] = 1;
+‏            for (int v : graph[u]) {
+‏                paths[v] += paths[u];
+‏                inDeg[v]--;
+‏                if (inDeg[v] == 0) q.add(v);
+            }
+        }
+‏        return paths;
+    }
+}
+
+
+
+// שאלה 2: צביעת תאים כך שמספר האדומים זוגי
+
+‏public class ColoringCells {
+‏    static int countColorings(int n) {
+‏        int[] even = new int[n+1];
+‏        int[] odd = new int[n+1];
+‏        even[0] = 1;
+
+‏        for (int i = 1; i <= n; i++) {
+‏            even[i] = 2 * even[i-1] + odd[i-1];
+‏            odd[i] = 2 * odd[i-1] + even[i-1];
+        }
+‏        return even[n];
+    }
+}
